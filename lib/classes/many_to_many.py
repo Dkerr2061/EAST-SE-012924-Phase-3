@@ -1,6 +1,15 @@
 class Hotel:
+
+    all = []
+
     def __init__(self, name):
         self.name = name
+        if(len(Hotel.all) == 0):
+            self.id = 1
+        else:
+            self.id = Hotel.all[-1].id + 1
+
+        Hotel.all.append(self)
 
     @property
     def name(self):
@@ -32,12 +41,24 @@ class Hotel:
             return None
         else:
             return customer_list
+        
+    def __repr__(self):
+        return f"Hotel # {self.id} => Name: {self.name}"
+       
 
 class Customer:
+
+    all = []
+
     
     def __init__(self, first_name, last_name):
         self.first_name = first_name
         self.last_name = last_name
+        if(len(Customer.all) == 0):
+            self.id = 1
+        else:
+            self.id = Customer.all[-1].id + 1
+        Customer.all.append(self)
 
     @property
     def first_name(self):
@@ -83,6 +104,10 @@ class Review:
         self.customer = customer
         self.rating = rating
         self.text = text
+        if(len(Review.all) == 0):
+            self.id = 1
+        else:
+            self.id = Review.all[-1].id + 1
 
         Review.all.append(self)
 
