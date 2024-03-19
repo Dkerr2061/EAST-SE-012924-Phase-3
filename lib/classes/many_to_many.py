@@ -37,7 +37,7 @@ class Hotel:
     
     def customers_more_than_three_reviews(self):
         customer_list = [customer for customer in self.customers() if len([review for review in customer.reviews() if review.hotel is self]) > 3]
-        if(len(self.reviews()) == 0):
+        if(len(customer_list) == 0):
             return None
         else:
             return customer_list
