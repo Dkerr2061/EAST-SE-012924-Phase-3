@@ -38,3 +38,38 @@ class Customer:
         pass
     
     # add new ORM methods after existing methods
+
+    @classmethod
+    def create_table(cls):
+        sql = """
+            CREATE TABLE IF NOT EXISTS customers (
+            id INTEGER PRIMARY KEY,
+            first_name TEXT,
+            last_name TEXT)
+    """
+        CURSOR.execute(sql)
+
+    
+    @classmethod
+    def drop_table(cls):
+        sql = """
+            DROP TABLE IF EXISTS customers;
+        """
+        CURSOR.execute(sql)
+
+    def save(self):
+        sql = """
+            INSERT INTO customers (first_name, last_name)
+            VALUES (?, ?)
+        """
+        CURSOR.execute(sql, (self.first_name, self.last_name))
+        CONN.commit()
+
+        self.id = CURSOR.lastrowid
+        Customer.all.append(self)
+
+    @classmethod
+    def create(cls, first_name, last_name):
+        customer = cls(first_name, last_name)
+        customer.save()
+        return customer

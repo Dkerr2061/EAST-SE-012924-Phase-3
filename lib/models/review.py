@@ -62,3 +62,39 @@ class Review:
         pass
 
     # add new ORM methods after existing methods
+    @classmethod
+    def create_table(cls):
+        sql = """
+            CREATE TABLE IF NOT EXISTS reviews (
+            id INTEGER PRIMARY KEY,
+            rating INTEGER,
+            text TEXT,
+            hotel_id INTEGER,
+            customer_id INTEGER
+            )
+    """
+        CURSOR.execute(sql)
+
+    @classmethod
+    def drop_table(cls):
+        sql = """
+            DROP TABLE IF EXISTS reviews;
+        """
+        CURSOR.execute(sql)
+
+    def save(self):
+        sql = """
+            INSERT INTO reviews (rating, text, hotel_id, customer_id)
+            VALUES (?, ?, ?, ?)
+        """
+        CURSOR.execute(sql, (self.rating, self.text, self.hotel_id, self.customer_id))
+        CONN.commit()
+
+        self.id = CURSOR.lastrowid
+        Review.all.append(self)
+
+    @classmethod
+    def create(cls, rating, text, hotel_id, customer_id):
+        review = cls(rating, text, hotel_id, customer_id)
+        review.save()
+        return review
